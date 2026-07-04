@@ -87,6 +87,18 @@
   .sum-count b{color:#fff;}
   .sum-count .ok-count b{color:var(--verde);}
   .sum-count .no-count b{color:#ff8aa4;}
+  .sumbar-actions{display:flex;gap:8px;align-items:center;}
+  .sumbar-btn{
+    display:flex;align-items:center;gap:6px;
+    height:34px;padding:0 12px;border-radius:9px;
+    border:1px solid var(--line);background:rgba(255,255,255,0.04);
+    color:var(--ink-dim);cursor:pointer;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;
+    transition:all .15s ease;
+  }
+  .sumbar-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none;flex-shrink:0;}
+  .sumbar-btn:hover{border-color:var(--cyan);color:#fff;background:rgba(0,196,223,0.08);}
+  .sumbar-btn.pdf-btn{border-color:rgba(255,178,0,0.35);color:var(--amber);}
+  .sumbar-btn.pdf-btn:hover{border-color:var(--amber);background:rgba(255,178,0,0.10);color:#fff;}
   .sum-divider{width:1px;align-self:stretch;background:var(--line);}
   .sum-block.combined .amount{background:linear-gradient(95deg,var(--cyan),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;}
   .sum-block.combined .cur{display:flex;align-items:center;gap:6px;}
@@ -325,7 +337,86 @@
     .card{grid-template-columns:40px 1fr;padding:16px 14px;}
     .price-edit{align-items:flex-start;text-align:left;}
   }
+
+  /* ============ ANIMACIONES ============ */
+  @keyframes fadeSlideUp{
+    from{opacity:0;transform:translateY(16px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  @keyframes popIn{
+    0%{transform:scale(0.94);}
+    55%{transform:scale(1.05);}
+    100%{transform:scale(1);}
+  }
+  @keyframes flashApprove{
+    0%{box-shadow:0 0 0 0 rgba(52,211,153,0.45);}
+    100%{box-shadow:0 0 0 14px rgba(52,211,153,0);}
+  }
+  @keyframes flashCancel{
+    0%{box-shadow:0 0 0 0 rgba(255,67,110,0.4);}
+    100%{box-shadow:0 0 0 14px rgba(255,67,110,0);}
+  }
+
+  .hero-top, .eyebrow, h1, .hero-desc, .hero-hint, .hero-meta{
+    opacity:0;animation:fadeSlideUp .7s cubic-bezier(.22,.9,.32,1) forwards;
+  }
+  .hero-top{animation-delay:.02s;}
+  .eyebrow{animation-delay:.10s;}
+  h1{animation-delay:.16s;}
+  .hero-desc{animation-delay:.26s;}
+  .hero-hint{animation-delay:.34s;}
+  .hero-meta{animation-delay:.40s;}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,.9,.32,1), transform .6s cubic-bezier(.22,.9,.32,1);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  .card{transition:border-color .18s ease, box-shadow .18s ease, opacity .18s ease, background .35s ease, transform .18s ease;}
+  .card.flash-approve{animation:flashApprove .6s ease-out;}
+  .card.flash-cancel{animation:flashCancel .6s ease-out;}
+  .card:hover{transform:translateY(-1px);}
+  .card:not(.state-approved):not(.state-cancelled){
+    transition:border-color .25s ease, box-shadow .25s ease, transform .18s ease, background .35s ease;
+  }
+  .card:not(.state-approved):not(.state-cancelled):hover{
+    border-color:rgba(0,196,223,0.5);
+    box-shadow:0 0 0 1px rgba(0,196,223,0.3), 0 16px 36px -18px rgba(0,196,223,0.3);
+  }
+  .card:not(.state-approved):not(.state-cancelled):active{
+    border-color:var(--cyan);
+    box-shadow:0 0 0 1.5px var(--cyan), 0 0 26px rgba(0,196,223,0.4);
+    transform:translateY(0);
+  }
+  .card.state-approved:hover{
+    box-shadow:0 0 0 1.5px var(--naranja), 0 16px 38px -16px rgba(255,106,26,0.5);
+  }
+  .card.state-cancelled:hover{
+    border-color:rgba(255,138,164,0.45);
+    box-shadow:0 0 0 1px rgba(255,138,164,0.2);
+  }
+
+  .ctrl-btn{transition:all .18s cubic-bezier(.34,1.56,.64,1);}
+  .ctrl-btn:active{transform:scale(0.88);}
+  .ctrl-btn.check.active, .ctrl-btn.cancel.active{animation:popIn .32s cubic-bezier(.34,1.56,.64,1);}
+
+  .add-block-btn, .card-remove, .cur-btn, .sumbar-btn, .rate-refresh{
+    transition:all .18s ease, transform .12s ease;
+  }
+  .add-block-btn:active, .sumbar-btn:active{transform:scale(0.96);}
+  .split-btn{transition:all .22s cubic-bezier(.22,.9,.32,1);}
+  .split-btn:hover{transform:translateY(-1px);}
+
+  .lightbox-stage img{animation:none;}
+  .lightbox.open .lightbox-stage img{animation:popIn .35s cubic-bezier(.22,.9,.32,1);}
+
+  @keyframes spinIcon{ to{transform:rotate(360deg);} }
+  .sumbar-btn.is-loading svg{animation:spinIcon .7s linear infinite;}
+  .sumbar-btn.is-loading{opacity:.75;pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -356,6 +447,15 @@
     <div class="sum-count">
       <span class="ok-count"><b id="countOk">0</b> aprobadas</span>
       <span class="no-count"><b id="countNo">0</b> descartadas</span>
+    </div>
+    <div class="sumbar-actions">
+      <button class="sumbar-btn" id="fullscreenBtn" title="Pantalla completa" aria-label="Pantalla completa">
+        <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m11 0h3a2 2 0 0 0 2-2v-3"/></svg>
+      </button>
+      <button class="sumbar-btn pdf-btn" id="pdfBtn" title="Descargar resumen en PDF" aria-label="Descargar PDF">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        <span>PDF</span>
+      </button>
     </div>
   </div>
 </div>
@@ -388,12 +488,12 @@
   </div>
 
   <div class="list" id="listContainer">
-    <div class="list-head">
+    <div class="list-head reveal">
       <h2>Presencia de marca en el evento</h2>
       <span class="cnt">Espacio físico</span>
     </div>
 
-    <div class="card">
+    <div class="card reveal">
       <div class="ctrl">
         <button class="ctrl-btn check" aria-label="Aprobar"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></button>
         <button class="ctrl-btn cancel" aria-label="Descartar"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
@@ -416,7 +516,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card reveal">
       <div class="ctrl">
         <button class="ctrl-btn check" aria-label="Aprobar"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></button>
         <button class="ctrl-btn cancel" aria-label="Descartar"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
@@ -439,12 +539,12 @@
       </div>
     </div>
 
-    <div class="list-head" style="margin-top:8px;">
+    <div class="list-head reveal" style="margin-top:8px;">
       <h2>Columnas del foyer / Experience Zone</h2>
       <span class="cnt">Espacio de paso obligado</span>
     </div>
 
-    <div class="card">
+    <div class="card reveal">
       <div class="ctrl">
         <button class="ctrl-btn check" aria-label="Aprobar"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></button>
         <button class="ctrl-btn cancel" aria-label="Descartar"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
@@ -471,7 +571,7 @@
       </div>
     </div>
 
-    <div class="card">
+    <div class="card reveal">
       <div class="ctrl">
         <button class="ctrl-btn check" aria-label="Aprobar"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></button>
         <button class="ctrl-btn cancel" aria-label="Descartar"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
@@ -493,12 +593,12 @@
       </div>
     </div>
 
-    <div class="list-head" style="margin-top:8px;">
+    <div class="list-head reveal" style="margin-top:8px;">
       <h2>Keynote destacado</h2>
       <span class="cnt">Disertante internacional</span>
     </div>
 
-    <div class="card featured-card featured-glow" id="mvCard">
+    <div class="card featured-card featured-glow reveal" id="mvCard">
       <div class="ctrl">
         <button class="ctrl-btn check" aria-label="Aprobar"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></button>
         <button class="ctrl-btn cancel" aria-label="Descartar"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
@@ -608,6 +708,29 @@
     return digits ? parseFloat(digits) : 0;
   }
 
+  const animState = new WeakMap();
+  function animateValue(el, from, to, formatter, duration = 450){
+    if(Math.abs(to - from) < 0.5){ el.textContent = formatter(to); return; }
+    const existing = animState.get(el);
+    if(existing) cancelAnimationFrame(existing);
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = from + (to - from) * eased;
+      el.textContent = formatter(val);
+      if(t < 1){
+        animState.set(el, requestAnimationFrame(tick));
+      } else {
+        el.textContent = formatter(to);
+        animState.delete(el);
+      }
+    }
+    animState.set(el, requestAnimationFrame(tick));
+  }
+
+  let lastARS = 0, lastUSD = 0, lastCombined = 0;
+
   function recalc(){
     let ars = 0, usd = 0, ok = 0, no = 0;
     listContainer.querySelectorAll('.card').forEach(card => {
@@ -624,10 +747,11 @@
         no++;
       }
     });
-    totalARSEl.textContent = fmtARS(ars);
-    totalUSDEl.textContent = fmtUSD(usd);
+    animateValue(totalARSEl, lastARS, ars, fmtARS);
+    animateValue(totalUSDEl, lastUSD, usd, fmtUSD);
     const combinedUSD = usd + (ars / TIPO_CAMBIO);
-    totalCombinedUSDEl.textContent = fmtUSD(combinedUSD);
+    animateValue(totalCombinedUSDEl, lastCombined, combinedUSD, fmtUSD);
+    lastARS = ars; lastUSD = usd; lastCombined = combinedUSD;
     countOkEl.textContent = ok;
     countNoEl.textContent = no;
   }
@@ -642,24 +766,28 @@
 
     checkBtn.addEventListener('click', () => {
       const already = card.classList.contains('state-approved');
-      card.classList.remove('state-approved','state-cancelled');
+      card.classList.remove('state-approved','state-cancelled','flash-approve','flash-cancel');
       checkBtn.classList.remove('active');
       cancelBtn.classList.remove('active');
       if(!already){
         card.classList.add('state-approved');
         checkBtn.classList.add('active');
+        requestAnimationFrame(() => card.classList.add('flash-approve'));
+        card.addEventListener('animationend', () => card.classList.remove('flash-approve'), { once:true });
       }
       recalc();
     });
 
     cancelBtn.addEventListener('click', () => {
       const already = card.classList.contains('state-cancelled');
-      card.classList.remove('state-approved','state-cancelled');
+      card.classList.remove('state-approved','state-cancelled','flash-approve','flash-cancel');
       checkBtn.classList.remove('active');
       cancelBtn.classList.remove('active');
       if(!already){
         card.classList.add('state-cancelled');
         cancelBtn.classList.add('active');
+        requestAnimationFrame(() => card.classList.add('flash-cancel'));
+        card.addEventListener('animationend', () => card.classList.remove('flash-cancel'), { once:true });
       }
       recalc();
     });
@@ -896,6 +1024,166 @@
   lightboxStage.addEventListener('dblclick', (e) => {
     if(e.target === lightboxImg) { scale = scale > 1.5 ? 1 : 2.2; applyTransform(); }
   });
+
+  /* ============ PANTALLA COMPLETA ============ */
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const fsIconExpand = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m11 0h3a2 2 0 0 0 2-2v-3"/>';
+  const fsIconCollapse = '<path d="M9 3v4a2 2 0 0 1-2 2H3m18 0h-4a2 2 0 0 1-2-2V3M3 15h4a2 2 0 0 1 2 2v4m6-6h4a2 2 0 0 1 2 2v0"/>';
+
+  fullscreenBtn.addEventListener('click', () => {
+    if(!document.fullscreenElement){
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    const svg = fullscreenBtn.querySelector('svg');
+    if(document.fullscreenElement){
+      svg.innerHTML = fsIconCollapse;
+      fullscreenBtn.title = 'Salir de pantalla completa';
+    } else {
+      svg.innerHTML = fsIconExpand;
+      fullscreenBtn.title = 'Pantalla completa';
+    }
+  });
+
+  /* ============ DESCARGAR RESUMEN EN PDF ============ */
+  function collectSummaryData(){
+    const items = [];
+    let ars = 0, usd = 0;
+    listContainer.querySelectorAll('.card').forEach(card => {
+      if(!card.classList.contains('state-approved')) return;
+      const priceEdit = card.querySelector('.price-edit');
+      if(!priceEdit) return;
+      const titleEl = card.querySelector('.card-title');
+      const title = titleEl ? titleEl.textContent.trim() : 'Propuesta';
+      const cur = priceEdit.dataset.cur;
+      const numEl = priceEdit.querySelector('.price-num');
+      const priceRaw = numEl ? numEl.textContent.trim() : '';
+      const suffixEl = priceEdit.querySelector('.price-suffix');
+      const suffix = suffixEl ? suffixEl.textContent.trim() : '';
+      let priceLabel;
+      if(cur === 'ARS'){ priceLabel = '$ ' + priceRaw + ' ' + suffix; ars += parseNum(priceRaw); }
+      else if(cur === 'USD'){ priceLabel = 'USD ' + priceRaw + ' ' + suffix; usd += parseNum(priceRaw); }
+      else { priceLabel = suffix || 'A cotizar'; }
+      items.push({ title, priceLabel });
+    });
+    const combinedUSD = usd + (ars / TIPO_CAMBIO);
+    return { items, ars, usd, combinedUSD };
+  }
+
+  document.getElementById('pdfBtn').addEventListener('click', () => {
+    const pdfBtnEl = document.getElementById('pdfBtn');
+    pdfBtnEl.classList.add('is-loading');
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const data = collectSummaryData();
+    const pageW = doc.internal.pageSize.getWidth();
+    const marginX = 18;
+    let y = 22;
+
+    // Header
+    doc.setFillColor(1, 33, 58);
+    doc.rect(0, 0, pageW, 34, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(17);
+    doc.text('Propuestas de auspicio — LaConfe 2026', marginX, 16);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    doc.setTextColor(190,210,225);
+    doc.text('Resumen de selección aprobada · Hilton Buenos Aires, Puerto Madero · 28 de octubre 2026', marginX, 24);
+
+    y = 46;
+    doc.setTextColor(20,30,45);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(12.5);
+    doc.text('Propuestas aprobadas', marginX, y);
+    y += 4;
+    doc.setDrawColor(220,225,230);
+    doc.line(marginX, y, pageW - marginX, y);
+    y += 8;
+
+    if(data.items.length === 0){
+      doc.setFont('helvetica','italic');
+      doc.setFontSize(11);
+      doc.setTextColor(120,130,140);
+      doc.text('Todavía no se aprobó ninguna propuesta.', marginX, y);
+      y += 10;
+    } else {
+      data.items.forEach((item, idx) => {
+        if(y > 260){ doc.addPage(); y = 20; }
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(11.5);
+        doc.setTextColor(20,30,45);
+        const titleLines = doc.splitTextToSize(item.title, pageW - marginX*2 - 45);
+        doc.text(titleLines, marginX, y);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(11.5);
+        doc.setTextColor(0,82,143);
+        doc.text(item.priceLabel, pageW - marginX, y, { align: 'right' });
+        y += (titleLines.length * 5.5) + 6;
+        doc.setDrawColor(235,238,240);
+        doc.line(marginX, y - 3, pageW - marginX, y - 3);
+      });
+    }
+
+    y += 4;
+    if(y > 245){ doc.addPage(); y = 20; }
+
+    // Totals box
+    doc.setFillColor(245,248,250);
+    doc.roundedRect(marginX, y, pageW - marginX*2, 34, 3, 3, 'F');
+    y += 9;
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    doc.setTextColor(90,100,110);
+    doc.text('Total en pesos (+ IVA)', marginX + 8, y);
+    doc.text('Total en dólares (+ IVA)', pageW/2, y);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(13);
+    doc.setTextColor(20,30,45);
+    doc.text('$ ' + Math.round(data.ars).toLocaleString('es-AR'), marginX + 8, y + 7);
+    doc.text('USD ' + Math.round(data.usd).toLocaleString('en-US'), pageW/2, y + 7);
+
+    y += 16;
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    doc.setTextColor(90,100,110);
+    doc.text('Total general combinado (USD, TC $' + Math.round(TIPO_CAMBIO).toLocaleString('es-AR') + ')', marginX + 8, y);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(13);
+    doc.setTextColor(255,106,26);
+    doc.text('USD ' + Math.round(data.combinedUSD).toLocaleString('en-US'), marginX + 8, y + 7);
+
+    // Footer
+    const today = new Date().toLocaleDateString('es-AR');
+    doc.setFont('helvetica','italic');
+    doc.setFontSize(8.5);
+    doc.setTextColor(150,160,170);
+    doc.text('Generado el ' + today + ' · Valores sujetos a confirmación final con el organizador y proveedores.', marginX, 287);
+
+    doc.save('resumen-propuestas-laconfe.pdf');
+    pdfBtnEl.classList.remove('is-loading');
+  });
+
+  /* ============ REVEAL AL HACER SCROLL ============ */
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if(entry.isIntersecting){
+          setTimeout(() => entry.target.classList.add('in-view'), i * 40);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in-view'));
+  }
 </script>
 
 </body>
