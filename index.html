@@ -46,7 +46,7 @@
     width:64px;background:rgba(255,255,255,0.08);border:1px solid var(--cyan);border-radius:5px;
     color:#fff;font-size:11px;padding:2px 6px;font-family:'Poppins',sans-serif;
   }
-  .usd-eq{font-size:10.5px;color:var(--ink-dim);font-weight:500;white-space:nowrap;}
+  .usd-eq{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--cyan);letter-spacing:.02em;white-space:nowrap;}
   .usd-eq.inline{margin-left:6px;}
   .ua-mark img{height:26px;width:auto;display:block;}
   .confe-logo{height:28px;width:auto;filter:drop-shadow(0 2px 10px rgba(255,140,20,0.35));}
@@ -94,14 +94,32 @@
   .section-head h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.02em;margin:0 0 6px;color:#fff;}
   .section-head p{margin:0;font-size:13px;color:var(--ink-dim);max-width:600px;line-height:1.55;}
 
-  .stand-summary{
-    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
-    background:rgba(255,178,0,0.07);border:1px solid rgba(255,178,0,0.25);border-radius:12px;
-    padding:13px 18px;margin-bottom:22px;
+  .total-bar{
+    background:linear-gradient(160deg,var(--panel),var(--panel-2));
+    border:1px solid var(--line);border-radius:14px;
+    padding:16px 20px;margin-bottom:22px;
   }
-  .stand-summary .sk{font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;}
-  .stand-summary .sv{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;}
-  .stand-summary .sv .none{color:var(--ink-dim);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;}
+  .total-row{display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+  .total-item{
+    flex:1;min-width:150px;display:flex;flex-direction:column;gap:3px;
+    padding:4px 18px;border-left:1px solid var(--line);
+  }
+  .total-item:first-child{border-left:none;padding-left:0;}
+  .total-item .ti-k{font-size:10.5px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.06em;}
+  .total-item .ti-v{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:.02em;}
+  .total-item .ti-v .none{color:var(--ink-dim);font-family:'Poppins',sans-serif;font-size:13px;font-weight:500;}
+  .total-item .ti-usd{font-family:'Poppins',sans-serif;font-size:11px;color:var(--ink-dim);font-weight:500;}
+  .total-item.highlight{
+    background:rgba(255,178,0,0.08);border-radius:10px;border-left:1px solid rgba(255,178,0,0.25);
+    margin-left:4px;
+  }
+  .total-item.highlight .ti-v{font-size:22px;color:var(--amber);}
+  .total-item.highlight .usd-eq{font-size:15px;margin-top:1px;}
+  @media(max-width:700px){
+    .total-item{border-left:none;padding-left:0;border-top:1px solid var(--line);padding-top:10px;}
+    .total-item:first-child{border-top:none;padding-top:0;}
+    .total-item.highlight{margin-left:0;padding:10px 14px;}
+  }
 
   /* STAND CARDS */
   .stand-card{
@@ -117,9 +135,10 @@
   .stand-name{font-size:20px;font-weight:700;color:#fff;margin:0;}
   .stand-tag{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;background:rgba(0,196,223,0.14);color:var(--cyan);border:1px solid rgba(0,196,223,0.3);}
   .stand-price{text-align:right;}
+  .stand-price .price-line{display:flex;align-items:baseline;justify-content:flex-end;gap:6px;}
   .stand-price .amt{font-family:'Bebas Neue',sans-serif;font-size:27px;color:#fff;letter-spacing:.02em;}
   .stand-price .sub{font-size:10.5px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;}
-  .stand-price .usd-eq{margin-top:3px;}
+  .stand-price .usd-eq{margin-top:4px;}
 
   .stand-body{display:grid;grid-template-columns:320px 1fr;gap:22px;}
   .stand-img{width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--line);position:relative;cursor:zoom-in;}
@@ -212,8 +231,9 @@
     padding:3px 9px;border-radius:100px;background:rgba(0,196,223,0.14);color:var(--cyan);
     border:1px solid rgba(0,196,223,0.3);margin-bottom:14px;
   }
-  .lightbox-info .li-price{font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;letter-spacing:.02em;margin:10px 0 2px;}
-  .lightbox-info .li-price-sub{font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:18px;}
+  .lightbox-info .li-price-row{display:flex;align-items:baseline;gap:8px;margin:10px 0 2px;}
+  .lightbox-info .li-price{font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;letter-spacing:.02em;}
+  .lightbox-info .li-price-sub{font-size:11px;color:var(--ink-dim);text-transform:uppercase;letter-spacing:.05em;}
   .lightbox-info .li-feat{list-style:none;margin:0;padding:0;display:grid;gap:9px;}
   .lightbox-info .li-feat li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink-dim);line-height:1.5;}
   .lightbox-info .li-feat li svg{width:13px;height:13px;stroke:var(--cyan);stroke-width:2.8;fill:none;flex-shrink:0;margin-top:2px;}
@@ -278,12 +298,25 @@
   <div class="section">
     <div class="section-head reveal">
       <h2>Comparación de propuestas</h2>
-      <p>Los tres presupuestos son sin IVA incluido. Elegí una opción para marcarla como seleccionada.</p>
+      <p>Los tres presupuestos son + IVA. Elegí una opción para marcarla como seleccionada.</p>
     </div>
 
-    <div class="stand-summary reveal">
-      <span class="sk">Opción seleccionada</span>
-      <span class="sv" id="chosenLabel"><span class="none">Ninguna todavía</span></span>
+    <div class="total-bar reveal">
+      <div class="total-row">
+        <div class="total-item">
+          <span class="ti-k">Ya confirmado</span>
+          <span class="ti-v">$ 15.943.400 <span class="ti-usd">+ USD 2.000</span></span>
+        </div>
+        <div class="total-item">
+          <span class="ti-k">Stand elegido</span>
+          <span class="ti-v" id="chosenLabel"><span class="none">Ninguno todavía</span></span>
+        </div>
+        <div class="total-item highlight">
+          <span class="ti-k">Total general</span>
+          <span class="ti-v" id="grandTotalARS">$ 15.943.400</span>
+          <span class="usd-eq" id="grandTotalUSD"></span>
+        </div>
+      </div>
     </div>
 
     <!-- HEKA -->
@@ -294,8 +327,10 @@
           <span class="stand-tag">Stand TOP</span>
         </div>
         <div class="stand-price">
-          <div class="amt" id="hekaAmt" data-ars="12500000">$ 12.500.000</div>
-          <div class="sub">+ IVA</div>
+          <div class="price-line">
+            <span class="amt" id="hekaAmt" data-ars="12500000">$ 12.500.000</span>
+            <span class="sub">+ IVA</span>
+          </div>
           <div class="usd-eq" id="hekaUsdEq" data-conv></div>
         </div>
       </div>
@@ -337,8 +372,10 @@
           <span class="stand-tag">Propuesta institucional a medida</span>
         </div>
         <div class="stand-price">
-          <div class="amt" data-ars="12400000">$ 12.400.000</div>
-          <div class="sub">sin IVA</div>
+          <div class="price-line">
+            <span class="amt" data-ars="12400000">$ 12.400.000</span>
+            <span class="sub">+ IVA</span>
+          </div>
           <div class="usd-eq" data-conv></div>
         </div>
       </div>
@@ -370,8 +407,10 @@
           <span class="stand-tag">Presupuesto aproximado</span>
         </div>
         <div class="stand-price">
-          <div class="amt" data-ars="18670000">$ 18.670.000</div>
-          <div class="sub">sin IVA</div>
+          <div class="price-line">
+            <span class="amt" data-ars="18670000">$ 18.670.000</span>
+            <span class="sub">+ IVA</span>
+          </div>
           <div class="usd-eq" data-conv></div>
         </div>
       </div>
@@ -420,8 +459,11 @@
     <div class="lightbox-info" id="lightboxInfo">
       <p class="li-name" id="liName">—</p>
       <span class="li-tag" id="liTag">—</span>
-      <div class="li-price" id="liPrice">—</div>
-      <div class="li-price-sub" id="liPriceSub">—</div>
+      <div class="li-price-row">
+        <span class="li-price" id="liPrice">—</span>
+        <span class="li-price-sub" id="liPriceSub">—</span>
+      </div>
+      <div class="usd-eq" id="liUsdEq" style="margin-bottom:16px;"></div>
       <ul class="li-feat" id="liFeat"></ul>
       <p class="li-note" id="liNote"></p>
     </div>
@@ -469,6 +511,7 @@
       input.replaceWith(rateLabelEl);
       setRateLabel();
       updateConversions();
+      updateGrandTotal();
     }
     input.addEventListener('blur', commit);
     input.addEventListener('keydown', (e) => {
@@ -516,12 +559,30 @@
       if(hekaImages[price]) hekaImg.src = hekaImages[price];
       if(hekaCard.classList.contains('chosen')) updateChosenLabel(hekaCard);
       updateConversions();
+      updateGrandTotal();
     });
   });
 
   // Choose one stand (mutually exclusive)
   const chosenLabel = document.getElementById('chosenLabel');
   const cards = document.querySelectorAll('.stand-card');
+  const grandTotalARSEl = document.getElementById('grandTotalARS');
+  const grandTotalUSDEl = document.getElementById('grandTotalUSD');
+  const CONFIRMED_ARS = 15943400;
+  const CONFIRMED_USD = 2000;
+
+  function parsePriceStr(str){
+    return parseFloat((str || '0').replace(/\./g, '')) || 0;
+  }
+
+  function updateGrandTotal(){
+    const chosen = document.querySelector('.stand-card.chosen');
+    const standARS = chosen ? parsePriceStr(chosen.dataset.price) : 0;
+    const totalARS = CONFIRMED_ARS + standARS;
+    grandTotalARSEl.textContent = '$ ' + Math.round(totalARS).toLocaleString('es-AR');
+    const totalUSDCombined = CONFIRMED_USD + (totalARS / TIPO_CAMBIO);
+    grandTotalUSDEl.textContent = '≈ ' + fmtUSD(totalUSDCombined);
+  }
 
   function updateChosenLabel(card){
     const vendor = card.dataset.vendor;
@@ -543,10 +604,13 @@
         btn.querySelector('span').textContent = 'Opción elegida';
         updateChosenLabel(card);
       } else {
-        chosenLabel.innerHTML = '<span class="none">Ninguna todavía</span>';
+        chosenLabel.innerHTML = '<span class="none">Ninguno todavía</span>';
       }
+      updateGrandTotal();
     });
   });
+
+  updateGrandTotal();
 
   /* ============ LIGHTBOX: ZOOM DE IMÁGENES ============ */
   const lightbox = document.getElementById('lightbox');
@@ -565,6 +629,7 @@
   const liTag = document.getElementById('liTag');
   const liPrice = document.getElementById('liPrice');
   const liPriceSub = document.getElementById('liPriceSub');
+  const liUsdEq = document.getElementById('liUsdEq');
   const liFeat = document.getElementById('liFeat');
   const liNote = document.getElementById('liNote');
 
@@ -588,7 +653,10 @@
     liPriceSub.textContent = sub ? sub.textContent : '';
     if(amt && amt.dataset.ars){
       const ars = parseFloat(amt.dataset.ars);
-      liPriceSub.textContent += '  ·  ≈ ' + fmtUSD(ars / TIPO_CAMBIO);
+      liUsdEq.textContent = '≈ ' + fmtUSD(ars / TIPO_CAMBIO);
+      liUsdEq.style.display = 'block';
+    } else {
+      liUsdEq.style.display = 'none';
     }
     liFeat.innerHTML = '';
     feats.forEach(li => {
